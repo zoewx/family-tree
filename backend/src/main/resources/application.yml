@@ -20,7 +20,7 @@ spring:
       max-request-size: 1MB
 
 server:
-  port: 5010
+  port: ${PORT:5010}
 
 app:
   jwt:
