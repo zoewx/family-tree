@@ -33,10 +33,10 @@ jobs:
         env:
           API_URL: ${{ secrets.API_URL }}
 
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: frontend
-          command: pages deploy dist/frontend --project-name=family-tree
+          command: deploy
