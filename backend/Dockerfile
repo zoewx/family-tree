@@ -10,6 +10,6 @@ RUN ./gradlew build -x test --no-daemon
 # Stage 2: Run
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY --from=builder /app/build/libs/*.jar app.jar
+COPY --from=builder /app/build/libs/family-tree-api-*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
