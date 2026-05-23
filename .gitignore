@@ -8,6 +8,7 @@ Thumbs.db
 # ============================================================
 # Backend (Java / Gradle / Spring Boot)
 # ============================================================
+backend/src/main/resources/application-local.yml
 backend/build/
 backend/.gradle/
 backend/out/
