@@ -2,5 +2,5 @@ name = "family-tree"
 compatibility_date = "2026-05-23"
 
 [assets]
-directory = "./dist/frontend"
+directory = "./dist/frontend/browser"
 not_found_handling = "single-page-application"
