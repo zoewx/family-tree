@@ -1,0 +1,68 @@
+# ============================================================
+# System
+# ============================================================
+.DS_Store
+Thumbs.db
+*.log
+
+# ============================================================
+# Backend (Java / Gradle / Spring Boot)
+# ============================================================
+backend/build/
+backend/.gradle/
+backend/out/
+backend/*.class
+backend/uploads/photos/*/
+!backend/uploads/photos/.gitkeep
+*.jar
+*.war
+*.ear
+HELP.md
+
+# ============================================================
+# Frontend (Angular / Node.js)
+# ============================================================
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/cache/
+frontend/tmp/
+frontend/out-tsc/
+frontend/coverage/
+npm-debug.log
+yarn-error.log
+
+# ============================================================
+# Flutter App
+# ============================================================
+flutter_app/.dart_tool/
+flutter_app/.flutter-plugins-dependencies
+flutter_app/.pub-cache/
+flutter_app/.pub/
+flutter_app/build/
+flutter_app/coverage/
+flutter_app/android/app/debug
+flutter_app/android/app/profile
+flutter_app/android/app/release
+flutter_app/**/doc/api/
+
+# ============================================================
+# IDEs
+# ============================================================
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.iml
+*.ipr
+*.iws
+.history/
+*.sublime-workspace
+
+# ============================================================
+# Docker
+# ============================================================
+.env
+.env.local
+.env.*.local
