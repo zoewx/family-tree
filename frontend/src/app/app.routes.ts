@@ -39,5 +39,10 @@ export const routes: Routes = [
     path: 'invite/:code',
     loadComponent: () => import('./pages/invite/invite.component').then(m => m.InviteComponent)
   },
+  {
+    path: 'admin',
+    loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/dashboard' }
 ];

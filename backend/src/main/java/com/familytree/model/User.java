@@ -34,6 +34,16 @@ public class User {
     @Builder.Default
     private Set<FamilyTreeMember> memberships = new HashSet<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private UserStatus status = UserStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private UserRole role = UserRole.USER;
+
     @Column(nullable = false, updatable = false)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -45,4 +55,7 @@ public class User {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    public enum UserStatus { PENDING, ACTIVE, REJECTED }
+    public enum UserRole { USER, ADMIN }
 }

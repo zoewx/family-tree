@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     @Transactional
-    public AuthResponse register(RegisterRequest request) {
+    public Map<String, String> register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
@@ -44,6 +45,8 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .displayName(request.getDisplayName() != null ? request.getDisplayName() : request.getUsername())
+                .status(User.UserStatus.PENDING)
+                .role(User.UserRole.USER)
                 .build();
         user = userRepository.save(user);
 
@@ -51,15 +54,25 @@ public class AuthService {
             acceptInvitation(user, request.getInvitationCode());
         }
 
-        return buildAuthResponse(user);
+        return Map.of(
+                "message", "Registration successful. Your account is pending admin approval.",
+                "username", user.getUsername()
+        );
     }
 
     public AuthResponse login(AuthRequest request) {
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+
+        if (user.getStatus() == User.UserStatus.PENDING) {
+            throw new RuntimeException("Your account is pending admin approval");
+        }
+        if (user.getStatus() == User.UserStatus.REJECTED) {
+            throw new RuntimeException("Your account has been rejected");
+        }
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
         return buildAuthResponse(user);
     }
@@ -103,6 +116,7 @@ public class AuthService {
                 .username(user.getUsername())
                 .displayName(user.getDisplayName())
                 .email(user.getEmail())
+                .role(user.getRole().name())
                 .build();
     }
 }

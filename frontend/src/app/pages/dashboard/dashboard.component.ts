@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ApiService, FamilyTreeDTO } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
@@ -18,7 +19,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, NzCardModule, NzButtonModule, NzEmptyModule, NzModalModule, NzInputModule, NzFormModule, NzTagModule, NzGridModule, NzTypographyModule, NzSpinModule, NzIconModule],
+  imports: [CommonModule, FormsModule, RouterLink, NzCardModule, NzButtonModule, NzEmptyModule, NzModalModule, NzInputModule, NzFormModule, NzTagModule, NzGridModule, NzTypographyModule, NzSpinModule, NzIconModule],
   template: `
     <div class="page-container">
       <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
@@ -29,11 +30,19 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
           </h2>
           <p>Manage and explore your family connections</p>
         </div>
-        <button nz-button nzType="primary" nzSize="large" (click)="showCreateModal = true"
-                style="height:42px;font-weight:600;">
-          <span nz-icon nzType="plus" nzTheme="outline"></span>
-          New Tree
-        </button>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <a *ngIf="isAdmin" routerLink="/admin">
+            <button nz-button nzSize="large" style="height:42px;font-weight:600;">
+              <span nz-icon nzType="team" nzTheme="outline"></span>
+              Manage Users
+            </button>
+          </a>
+          <button nz-button nzType="primary" nzSize="large" (click)="showCreateModal = true"
+                  style="height:42px;font-weight:600;">
+            <span nz-icon nzType="plus" nzTheme="outline"></span>
+            New Tree
+          </button>
+        </div>
       </div>
 
       <nz-spin [nzSpinning]="loading">
@@ -127,10 +136,12 @@ export class DashboardComponent implements OnInit {
   showCreateModal = false;
   newTreeName = '';
   newTreeDescription = '';
+  isAdmin = false;
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.currentUser?.role === 'ADMIN';
     this.loadTrees();
   }
 

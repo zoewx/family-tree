@@ -29,6 +29,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 
         <div class="glass-card" style="padding:36px 32px;">
           <nz-alert *ngIf="error" nzType="error" [nzMessage]="error" nzShowIcon style="margin-bottom:20px;"></nz-alert>
+          <nz-alert *ngIf="successMessage" nzType="success" [nzMessage]="successMessage" nzShowIcon style="margin-bottom:20px;"></nz-alert>
 
           <nz-form-item>
             <nz-form-label style="font-weight:500;">Username</nz-form-label>
@@ -75,7 +76,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
             </nz-form-control>
           </nz-form-item>
 
-          <button nz-button nzType="primary" nzBlock nzSize="large" [nzLoading]="loading" (click)="register()"
+          <button nz-button nzType="primary" nzBlock nzSize="large" [nzLoading]="loading" [disabled]="!!successMessage" (click)="register()"
                   style="margin-top:8px;height:44px;font-size:15px;font-weight:600;">
             <span nz-icon nzType="user" nzTheme="outline" *ngIf="!loading"></span>
             Create Account
@@ -98,6 +99,7 @@ export class RegisterComponent {
   invitationCode = '';
   error = '';
   loading = false;
+  successMessage = '';
 
   constructor(
     private authService: AuthService,
@@ -125,7 +127,10 @@ export class RegisterComponent {
       displayName: this.displayName || this.username,
       invitationCode: this.invitationCode || undefined
     }).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: (res) => {
+        this.successMessage = res.message || 'Registration successful. Please wait for admin approval.';
+        this.loading = false;
+      },
       error: (err) => {
         this.error = err.error?.message || 'Registration failed';
         this.loading = false;

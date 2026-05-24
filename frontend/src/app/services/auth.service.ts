@@ -11,6 +11,7 @@ export interface AuthResponse {
   username: string;
   displayName: string;
   email: string;
+  role: string;
 }
 
 export interface RegisterRequest {
@@ -54,10 +55,9 @@ export class AuthService {
     return this.currentUser?.accessToken || null;
   }
 
-  register(request: RegisterRequest): Observable<AuthResponse> {
+  register(request: RegisterRequest): Observable<{ message: string; username: string }> {
     return this.http
-      .post<AuthResponse>(`${this.apiUrl}/register`, request)
-      .pipe(tap((res) => this.setSession(res)));
+      .post<{ message: string; username: string }>(`${this.apiUrl}/register`, request);
   }
 
   login(request: LoginRequest): Observable<AuthResponse> {
