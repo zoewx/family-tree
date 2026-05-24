@@ -64,7 +64,7 @@ public class AuthService {
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Invalid username or password"));
 
-        if (user.getStatus() == User.UserStatus.PENDING) {
+        if (user.getStatus() == null || user.getStatus() == User.UserStatus.PENDING) {
             throw new RuntimeException("Your account is pending admin approval");
         }
         if (user.getStatus() == User.UserStatus.REJECTED) {

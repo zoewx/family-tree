@@ -35,12 +35,12 @@ public class User {
     private Set<FamilyTreeMember> memberships = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     @Builder.Default
     private UserStatus status = UserStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     @Builder.Default
     private UserRole role = UserRole.USER;
 

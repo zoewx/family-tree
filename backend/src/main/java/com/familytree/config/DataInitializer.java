@@ -19,6 +19,14 @@ public class DataInitializer {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void init() {
+        // Migrate existing users that were created before status/role columns existed
+        userRepository.findByStatusIsNull().forEach(u -> {
+            u.setStatus(User.UserStatus.ACTIVE);
+            u.setRole(User.UserRole.USER);
+            userRepository.save(u);
+        });
+
+        // Create admin account if not exists
         if (!userRepository.existsByUsername("admin")) {
             User admin = User.builder()
                     .username("admin")
