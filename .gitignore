@@ -44,7 +44,11 @@ flutter_app/.pub-cache/
 flutter_app/.pub/
 flutter_app/build/
 flutter_app/coverage/
-flutter_app/android/
+flutter_app/android/app/debug/
+flutter_app/android/app/profile/
+flutter_app/android/app/release/
+flutter_app/android/.gradle/
+flutter_app/android/local.properties
 flutter_app/ios/
 flutter_app/linux/
 flutter_app/macos/

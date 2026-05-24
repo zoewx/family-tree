@@ -13,9 +13,10 @@ class AppTheme {
       elevation: 0,
       scrolledUnderElevation: 1,
     ),
-    cardTheme: CardThemeData(
+    cardTheme: const CardTheme(
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16))),
       color: Colors.white,
     ),
     inputDecorationTheme: InputDecorationTheme(
@@ -53,10 +54,11 @@ class AppTheme {
       elevation: 0,
       scrolledUnderElevation: 1,
     ),
-    cardTheme: CardThemeData(
+    cardTheme: const CardTheme(
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: const Color(0xFF2C2C2E),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16))),
+      color: Color(0xFF2C2C2E),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
