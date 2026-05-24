@@ -43,6 +43,10 @@ dependencies {
     // Apache POI for Excel
     implementation 'org.apache.poi:poi-ooxml:5.2.5'
 
+    // AWS SDK S3 (Cloudflare R2 compatible)
+    implementation platform('software.amazon.awssdk:bom:2.26.31')
+    implementation 'software.amazon.awssdk:s3'
+
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
