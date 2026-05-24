@@ -208,6 +208,13 @@ public class PersonService {
         if (linkRequestRepository.existsByRequesterIdAndPersonIdAndStatus(userId, personId, LinkRequest.Status.PENDING)) {
             throw new RuntimeException("You already have a pending link request for this person");
         }
+        // Cancel any other pending link requests from this user in the same tree
+        linkRequestRepository.findByRequesterIdAndFamilyTreeIdAndStatus(userId, treeId, LinkRequest.Status.PENDING)
+                .forEach(pending -> {
+                    pending.setStatus(LinkRequest.Status.REJECTED);
+                    pending.setResolvedAt(java.time.LocalDateTime.now());
+                    linkRequestRepository.save(pending);
+                });
         var member = memberRepository.findByUserIdAndFamilyTreeId(userId, treeId)
                 .orElseThrow(() -> new RuntimeException("Not a member"));
         LinkRequest lr = LinkRequest.builder()
@@ -236,6 +243,14 @@ public class PersonService {
         }
         var member = memberRepository.findByUserIdAndFamilyTreeId(lr.getRequester().getId(), lr.getFamilyTree().getId())
                 .orElseThrow(() -> new RuntimeException("Requester is no longer a member"));
+
+        // Clear any existing link this user has to another person in the same tree
+        personRepository.findByFamilyTreeIdAndLinkedUserId(lr.getFamilyTree().getId(), lr.getRequester().getId())
+                .ifPresent(oldPerson -> {
+                    oldPerson.setLinkedUser(null);
+                    personRepository.save(oldPerson);
+                });
+
         person.setLinkedUser(lr.getRequester());
         member.setLinkedPerson(person);
         personRepository.save(person);
@@ -265,6 +280,14 @@ public class PersonService {
         }
         var user = memberRepository.findByUserIdAndFamilyTreeId(userId, treeId)
                 .orElseThrow(() -> new RuntimeException("Not a member"));
+
+        // Clear any existing link this user has to another person in the same tree
+        personRepository.findByFamilyTreeIdAndLinkedUserId(treeId, userId)
+                .ifPresent(oldPerson -> {
+                    oldPerson.setLinkedUser(null);
+                    personRepository.save(oldPerson);
+                });
+
         person.setLinkedUser(user.getUser());
         user.setLinkedPerson(person);
         personRepository.save(person);

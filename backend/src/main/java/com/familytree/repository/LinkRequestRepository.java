@@ -9,4 +9,5 @@ public interface LinkRequestRepository extends JpaRepository<LinkRequest, UUID> 
     List<LinkRequest> findByFamilyTreeIdAndStatus(UUID familyTreeId, LinkRequest.Status status);
     List<LinkRequest> findByFamilyTreeId(UUID familyTreeId);
     boolean existsByRequesterIdAndPersonIdAndStatus(UUID requesterId, UUID personId, LinkRequest.Status status);
+    List<LinkRequest> findByRequesterIdAndFamilyTreeIdAndStatus(UUID requesterId, UUID familyTreeId, LinkRequest.Status status);
 }
